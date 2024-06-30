@@ -30,6 +30,11 @@ func New(options ...Option) (*Publisher, error) {
 		opt(&p)
 	}
 
+	// if producer already set, imediately return
+	if p.producer != nil {
+		return &p, nil
+	}
+
 	// Validate configuration
 	if len(p.brokers) == 0 {
 		return nil, ErrNoBrokers

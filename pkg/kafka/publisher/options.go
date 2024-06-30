@@ -15,3 +15,9 @@ func WithConfig(config *sarama.Config) Option {
 		p.config = config
 	}
 }
+
+func WithProducer(producer sarama.SyncProducer) Option {
+	return func(p *Publisher) {
+		p.producer = producer
+	}
+}
