@@ -1,7 +1,10 @@
 package event
 
 import (
+	"encoding/json"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -24,4 +27,14 @@ func (e *UserSignOutEvent) Topic() string {
 // GET KEY NAME, used for partition
 func (e *UserSignOutEvent) Key() string {
 	return e.Id
+}
+
+// GET Payload
+func (e *UserSignOutEvent) Payload() ([]byte, error) {
+	payload, err := json.Marshal(e)
+	if err != nil {
+		return nil, errors.Wrap(err, "json marshall failed")
+	}
+
+	return payload, nil
 }
