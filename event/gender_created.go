@@ -1,7 +1,10 @@
 package event
 
 import (
+	"encoding/json"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // Topic
@@ -26,4 +29,14 @@ func (e *GenderCreatedEvent) Topic() string {
 // GET KEY NAME, used for partition
 func (e *GenderCreatedEvent) Key() string {
 	return e.Id
+}
+
+// GET Payload
+func (e *GenderCreatedEvent) Payload() ([]byte, error) {
+	payload, err := json.Marshal(e)
+	if err != nil {
+		return nil, errors.Wrap(err, "json marshall failed")
+	}
+
+	return payload, nil
 }
