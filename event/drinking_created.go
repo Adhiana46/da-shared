@@ -1,0 +1,42 @@
+package event
+
+import (
+	"encoding/json"
+	"time"
+
+	"github.com/pkg/errors"
+)
+
+// Topic
+const (
+	DrinkingCreatedTopic = "master.drinking"
+)
+
+type DrinkingCreatedEvent struct {
+	DrinkingCreated struct{}  `json:"drinking_created"` // marking
+	Id              string    `json:"id"`
+	Name            string    `json:"name"`
+	IsDeleted       bool      `json:"is_deleted"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
+// GET TOPIC NAME
+func (e *DrinkingCreatedEvent) Topic() string {
+	return DrinkingCreatedTopic
+}
+
+// GET KEY NAME, used for partition
+func (e *DrinkingCreatedEvent) Key() string {
+	return e.Id
+}
+
+// GET Payload
+func (e *DrinkingCreatedEvent) Payload() ([]byte, error) {
+	payload, err := json.Marshal(e)
+	if err != nil {
+		return nil, errors.Wrap(err, "json marshall failed")
+	}
+
+	return payload, nil
+}
